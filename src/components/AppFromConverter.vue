@@ -23,13 +23,13 @@ export default {
                     <h2>Valuta</h2>
                 </div>
                 <div class="">
-                    <input type="text" name="" id="" class="">
+                    <input type="number" name="ammount1" id="ammount1" class="">
                     <select name="currency1" id="currency1" v-model="currency_1">
                         <option v-for="(currency, index) in currencies" :key="index" :value="currency">{{ currency }}</option>
                     </select>
                 </div>
                 <div class="">
-                    <input type="text" name="" id="" class="">
+                    <input type="number" name="ammount1" id="ammount1" class="">
                     <select name="currency2" id="currency2" v-model="currency_2">
                         <option v-for="(currency, index) in currencies" :key="index" :value="currency">{{ currency }}</option>
                     </select>
