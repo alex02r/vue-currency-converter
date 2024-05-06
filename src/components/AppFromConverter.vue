@@ -2,7 +2,13 @@
 export default {
     props:{
         currencies: Object
-    }
+    },
+    data() {
+        return {
+            currency_1: "Euro",
+            currency_2: "United States Dollar",
+        }
+    },
 }
 </script>
 <template lang="">
@@ -18,14 +24,14 @@ export default {
                 </div>
                 <div class="">
                     <input type="text" name="" id="" class="">
-                    <select name="" id="">
-                        <option value="">Prova</option>
+                    <select name="currency1" id="currency1" v-model="currency_1">
+                        <option v-for="(currency, index) in currencies" :key="index" :value="currency">{{ currency }}</option>
                     </select>
                 </div>
                 <div class="">
                     <input type="text" name="" id="" class="">
-                    <select name="" id="">
-                        <option value="">Prova</option>
+                    <select name="currency2" id="currency2" v-model="currency_2">
+                        <option v-for="(currency, index) in currencies" :key="index" :value="currency">{{ currency }}</option>
                     </select>
                 </div>
             </div>
