@@ -10,6 +10,7 @@ export default {
     return {
       store,
       currencies: {},
+      loading: true
     }
   },
   mounted() {
@@ -20,6 +21,7 @@ export default {
     getCurrencies(){
       axios.get(store.api_frankfurter+'currencies').then( response =>{
         this.currencies = response.data;
+        this.loading = false;
       })
     }
   },
@@ -27,10 +29,25 @@ export default {
 </script>
 <template lang="">
   <main>
-    <AppFromConverter :currencies="currencies" />
+    <div class="spinner" v-if="loading"></div>
+    <AppFromConverter v-else :currencies="currencies" />
   </main>
 </template>
 <style lang="scss">
   @use './styles/generals.scss';
+  .spinner {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: conic-gradient(#0000 10%,#474bff);
+    -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 0);
+    animation: spinner-zp9dbg 1s infinite linear;
+ }
+ 
+ @keyframes spinner-zp9dbg {
+    to {
+       transform: rotate(1turn);
+    }
+ }
 
 </style>
