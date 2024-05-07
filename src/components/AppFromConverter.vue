@@ -13,29 +13,33 @@ export default {
             currency_2: "United States Dollar",
             value_1: 1,
             value_2: 0,
+
         }
     },
     mounted() {
         this.getValue( this.value_1, this.currency_1, this.currency_2)
     },
     methods: {
-        getValue(amount, from, to){
-            let valutaInvertita = {};
-
-            // Iterazione attraverso l'oggetto originale
-            for (let chiave in this.currencies) {
-                if (this.currencies.hasOwnProperty(chiave)) {
-                    let valore = this.currencies[chiave];
-                    valutaInvertita[valore] = chiave;
+        getCurrency(value){
+            for (let currency in this.currencies) {
+                if (this.currencies[currency] === value) {
+                    return currency;    
                 }
             }
-            let request = 'latest?amount='+amount+'&from='+valutaInvertita[from]+'&to='+valutaInvertita[to];
+        },
+        getValue(amount, from, to){
+            
+            from = this.getCurrency(from);
+            to = this.getCurrency(to);
+            console.log(from, to);
+
+            let request = 'latest?amount='+amount+'&from='+from+'&to='+to;
             axios.get(store.api_frankfurter+request).then( response => {
-                console.log(response.data.rates[valutaInvertita[to]]);
-                if (this.currency_1 == from) {
-                    this.value_2 = response.data.rates[valutaInvertita[to]]
+                console.log(response.data.rates[to]);
+                if (this.currency_1 == this.currencies[from]) {
+                    this.value_2 = response.data.rates[to]
                 }else{
-                    this.value_1 = response.data.rates[valutaInvertita[to]]
+                    this.value_1 = response.data.rates[to]
                 }
             })
         }
@@ -53,15 +57,15 @@ export default {
                     <h4>Resoconto</h4>
                     <h2>Valuta</h2>
                 </div>
-                <div class="">
-                    <input type="number" name="ammount1" id="ammount1" class="" v-model="value_1" @keyup="getValue(value_1, currency_1, currency_2)">
-                    <select name="currency1" id="currency1" v-model="currency_1" @change="getValue(value_1, currency_1, currency_2)">
+                <div class="input-group mb-3">
+                    <input type="number" name="ammount1" id="ammount1" class="form-control" v-model="value_1" @keyup="getValue(value_1, currency_1, currency_2)">
+                    <select class="form-select" name="currency1" id="currency1" v-model="currency_1" @change="getValue(value_1, currency_1, currency_2)">
                         <option v-for="(currency, index) in currencies" :key="index" :value="currency">{{ currency }}</option>
                     </select>
                 </div>
-                <div class="">
-                    <input type="number" name="ammount1" id="ammount1" class="" v-model="value_2" @keyup="getValue(value_2, currency_2, currency_1)">
-                    <select name="currency2" id="currency2" v-model="currency_2" @change="getValue(value_1, currency_1, currency_2)">
+                <div class="input-group mb-3">
+                    <input type="number" name="ammount2" id="ammount2" class="form-control" v-model="value_2" @keyup="getValue(value_2, currency_2, currency_1)">
+                    <select class="form-select" name="currency2" id="currency2" v-model="currency_2" @change="getValue(value_1, currency_1, currency_2)">
                         <option v-for="(currency, index) in currencies" :key="index" :value="currency">{{ currency }}</option>
                     </select>
                 </div>
@@ -69,6 +73,6 @@ export default {
         </div>
     </div>
 </template>
-<style lang="">
-    
+<style lang="scss" scoped>
+
 </style>
