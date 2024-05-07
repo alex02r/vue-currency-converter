@@ -13,13 +13,22 @@ export default {
             currency_2: "United States Dollar",
             value_1: 1,
             value_2: 0,
-
         }
     },
     mounted() {
         this.getValue( this.value_1, this.currency_1, this.currency_2)
     },
     methods: {
+        getFormattedValue(currency, amount){
+
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: currency
+            });
+
+            return formatter.format(amount);
+
+        },
         getCurrency(value){
             for (let currency in this.currencies) {
                 if (this.currencies[currency] === value) {
@@ -28,10 +37,9 @@ export default {
             }
         },
         getValue(amount, from, to){
-            
+
             from = this.getCurrency(from);
             to = this.getCurrency(to);
-            console.log(from, to);
 
             let request = 'latest?amount='+amount+'&from='+from+'&to='+to;
             axios.get(store.api_frankfurter+request).then( response => {
@@ -54,8 +62,8 @@ export default {
             </div>
             <div class="col-12 col-md-6">
                 <div class="">
-                    <h4>Resoconto</h4>
-                    <h2>Valuta</h2>
+                    <h4>{{ getFormattedValue( getCurrency(currency_1), value_1) }} è uguale a</h4>
+                    <h2>{{ new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format( value_2 ) +' '+getCurrency(currency_2)}} </h2>
                 </div>
                 <div class="input-group mb-3">
                     <input type="number" name="ammount1" id="ammount1" class="form-control" v-model="value_1" @keyup="getValue(value_1, currency_1, currency_2)">
